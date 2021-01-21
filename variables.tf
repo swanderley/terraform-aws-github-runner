@@ -276,7 +276,7 @@ variable "cloudwatch_config" {
 }
 
 variable "runner_log_files" {
-  description = "(optional) List of logfiles to send to cloudwatch, will onlybe usded if `enable_cloudwatch_agent` is set to true. Object description: `log_group_name`: Name of the log group, `prefix_log_group`: module will prefix the log group with `/github-self-hosted-runners/<var.environment>`, `file_path`: path to the log file, `log_stream_name`: name of the log stream."
+  description = "(optional) Replaces the module default cloudwatch log config. See https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html for details."
   type = list(object({
     log_group_name   = string
     prefix_log_group = bool
