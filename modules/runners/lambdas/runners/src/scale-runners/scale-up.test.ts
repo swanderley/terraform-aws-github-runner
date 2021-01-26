@@ -166,6 +166,18 @@ describe('scaleUp with GHES', () => {
         repoName: `${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName}`,
       });
     });
+
+    it('creates a runner for group', async () => {
+      process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
+      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
+      await scaleUp('aws:sqs', TEST_DATA);
+      expect(createRunner).toBeCalledWith({
+        environment: 'unit-test-environment',
+        runnerConfig: `--url https://github.enterprise.something/${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName} --token 1234abcd --labels label1,label2 --runnergroup TEST_GROUP`,
+        orgName: undefined,
+        repoName: `${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName}`,
+      });
+    });
   });
 });
 
@@ -263,6 +275,18 @@ describe('scaleUp with public GH', () => {
       expect(createRunner).toBeCalledWith({
         environment: 'unit-test-environment',
         runnerConfig: `--url https://github.com/${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName} --token 1234abcd --labels label1,label2`,
+        orgName: undefined,
+        repoName: `${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName}`,
+      });
+    });
+
+    it('creates a runner for group', async () => {
+      process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
+      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
+      await scaleUp('aws:sqs', TEST_DATA);
+      expect(createRunner).toBeCalledWith({
+        environment: 'unit-test-environment',
+        runnerConfig: `--url https://github.com/${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName} --token 1234abcd --labels label1,label2 --runnergroup TEST_GROUP`,
         orgName: undefined,
         repoName: `${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName}`,
       });
