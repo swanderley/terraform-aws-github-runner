@@ -127,6 +127,18 @@ describe('scaleUp with GHES', () => {
         repoName: undefined,
       });
     });
+
+    it('creates a runner and ensure the group argument is ignored', async () => {
+      process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
+      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
+      await scaleUp('aws:sqs', TEST_DATA);
+      expect(createRunner).toBeCalledWith({
+        environment: 'unit-test-environment',
+        runnerConfig: `--url https://github.enterprise.something/${TEST_DATA.repositoryOwner} --token 1234abcd --labels label1,label2 --runnergroup TEST_GROUP`,
+        orgName: TEST_DATA.repositoryOwner,
+        repoName: undefined,
+      });
+    });
   });
 
   describe('on repo level', () => {
@@ -167,13 +179,13 @@ describe('scaleUp with GHES', () => {
       });
     });
 
-    it('creates a runner for group', async () => {
+    it('creates a runner and ensure the group argument is ignored', async () => {
       process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
-      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
+      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP_IGNORED';
       await scaleUp('aws:sqs', TEST_DATA);
       expect(createRunner).toBeCalledWith({
         environment: 'unit-test-environment',
-        runnerConfig: `--url https://github.enterprise.something/${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName} --token 1234abcd --labels label1,label2 --runnergroup TEST_GROUP`,
+        runnerConfig: `--url https://github.enterprise.something/${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName} --token 1234abcd --labels label1,label2`,
         orgName: undefined,
         repoName: `${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName}`,
       });
@@ -240,6 +252,18 @@ describe('scaleUp with public GH', () => {
         repoName: undefined,
       });
     });
+
+    it('creates a runner and ensure the group argument is ignored', async () => {
+      process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
+      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
+      await scaleUp('aws:sqs', TEST_DATA);
+      expect(createRunner).toBeCalledWith({
+        environment: 'unit-test-environment',
+        runnerConfig: `--url https://github.com/${TEST_DATA.repositoryOwner} --token 1234abcd --labels label1,label2 --runnergroup TEST_GROUP`,
+        orgName: TEST_DATA.repositoryOwner,
+        repoName: undefined,
+      });
+    });
   });
 
   describe('on repo level', () => {
@@ -280,13 +304,13 @@ describe('scaleUp with public GH', () => {
       });
     });
 
-    it('creates a runner for group', async () => {
+    it('creates a runner and ensure the group argument is ignored', async () => {
       process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
-      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
+      process.env.RUNNER_GROUP_NAME = 'TEST_GROUP_IGNORED';
       await scaleUp('aws:sqs', TEST_DATA);
       expect(createRunner).toBeCalledWith({
         environment: 'unit-test-environment',
-        runnerConfig: `--url https://github.com/${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName} --token 1234abcd --labels label1,label2 --runnergroup TEST_GROUP`,
+        runnerConfig: `--url https://github.com/${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName} --token 1234abcd --labels label1,label2`,
         orgName: undefined,
         repoName: `${TEST_DATA.repositoryOwner}/${TEST_DATA.repositoryName}`,
       });

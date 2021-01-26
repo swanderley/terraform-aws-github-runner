@@ -65,7 +65,7 @@ export const scaleUp = async (eventSource: string, payload: ActionRequestMessage
         environment: environment,
         runnerConfig: enableOrgLevel
           ? `--url ${configBaseUrl}/${payload.repositoryOwner} --token ${token} ${labelsArgument}${runnerGroupArgument}`
-          : `--url ${configBaseUrl}/${payload.repositoryOwner}/${payload.repositoryName} --token ${token} ${labelsArgument}${runnerGroupArgument}`,
+          : `--url ${configBaseUrl}/${payload.repositoryOwner}/${payload.repositoryName} --token ${token} ${labelsArgument}`,
         orgName: orgName,
         repoName: repoName,
       });
