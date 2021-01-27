@@ -128,7 +128,7 @@ describe('scaleUp with GHES', () => {
       });
     });
 
-    it('creates a runner and ensure the group argument is ignored', async () => {
+    it('creates a runner with labels in s specific group', async () => {
       process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
       process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
       await scaleUp('aws:sqs', TEST_DATA);
@@ -253,7 +253,7 @@ describe('scaleUp with public GH', () => {
       });
     });
 
-    it('creates a runner and ensure the group argument is ignored', async () => {
+    it('creates a runner with labels in s specific group', async () => {
       process.env.RUNNER_EXTRA_LABELS = 'label1,label2';
       process.env.RUNNER_GROUP_NAME = 'TEST_GROUP';
       await scaleUp('aws:sqs', TEST_DATA);
