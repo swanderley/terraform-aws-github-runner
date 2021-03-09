@@ -6,10 +6,6 @@
     {
       "name": "develop",
       "prerelease": true
-    },
-    {
-      "name": "automate-release",
-      "prerelease": true
     }
   ],
   "tagFormat": "v${version}",
