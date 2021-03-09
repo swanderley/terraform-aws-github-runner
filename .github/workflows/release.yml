@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - develop
+      - automate-release
 
 jobs:
   prepare:
@@ -56,15 +58,25 @@ jobs:
         uses: npalm/action-app-token@v1.0.0
         id: app-token
         with:
-          appId: ${{ secrets.APP_ID }}
-          appPrivateKeyBase64: ${{ secrets.APP_PRIVATE_KEY_BASE64 }}
+          appId: ${{ secrets.FOREST_RELEASER_APP_ID }}
+          appPrivateKeyBase64: ${{ secrets.FOREST_RELEASER_APP_PRIVATE_KEY_BASE64 }}
           appInstallationType: repo
           appInstallationValue: ${{ github.repository }}
 
       - name: Release
+        if: github.event_name != 'pull_request' && contains('refs/heads/master', github.ref)
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           cp .release/* .
           yarn
-          yarn release --repositoryUrl https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+          yarn release -d --repositoryUrl https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+
+      - name: Dry run release
+        if: github.event_name != 'pull_request' 
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          cp .release/* .
+          yarn
+          yarn release -d --repositoryUrl https://x-access-token:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
