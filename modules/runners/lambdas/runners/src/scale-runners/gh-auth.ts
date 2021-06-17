@@ -46,13 +46,21 @@ export async function createGithubAuth(
   const appId: number = parseInt(process.env.GITHUB_APP_ID as string);
   const clientId = process.env.GITHUB_APP_CLIENT_ID as string;
 
-  const authOptions: StrategyOptions = {
+  // const authOptions: StrategyOptions = {
+  //   appId,
+  //   privateKey,
+  //   installationId,
+  //   clientId,
+  //   clientSecret,
+  // };
+  let authOptions: StrategyOptions = {
     appId,
     privateKey,
-    installationId,
     clientId,
     clientSecret,
   };
+  if (installationId) authOptions = { ...authOptions, installationId };
+
   console.debug(ghesApiUrl);
   if (ghesApiUrl) {
     authOptions.request = request.defaults({
