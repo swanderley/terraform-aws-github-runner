@@ -649,7 +649,7 @@
   resolved "https://registry.yarnpkg.com/@octokit/webhooks-types/-/webhooks-types-4.2.0.tgz#7c3798fe2c469eb62c5fc3440301e34bf288e6b7"
   integrity sha512-BbWkXK0ZLE2BXF7OKlrK5B7nCqgawEiZ7orzLls5rLZlepHy1LtFlh2DSe3McqJznlBh0JRk+/eUowgXfmKmIw==
 
-"@octokit/webhooks@^9.11.0":
+"@octokit/webhooks@^9.10.0":
   version "9.11.0"
   resolved "https://registry.yarnpkg.com/@octokit/webhooks/-/webhooks-9.11.0.tgz#e2f491243dd2d0091a4aa24f683ac0958aa040e5"
   integrity sha512-0pgBcPtpSIfvJX4COVQbbAL2kndKYLC0kHxnqOEschoVUClLaU7f8xkNX9royJF4vg9dc2AVHVvd9QC8yVrdVw==

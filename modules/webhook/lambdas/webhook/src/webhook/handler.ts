@@ -29,7 +29,7 @@ export const handle = async (headers: IncomingHttpHeaders, payload: any): Promis
   const webhooks = new Webhooks({
     secret: secret,
   });
-  if (!webhooks.verify(payload, signature)) {
+  if (!(await webhooks.verify(payload, signature))) {
     console.error('Unable to verify signature!');
     return 401;
   }
