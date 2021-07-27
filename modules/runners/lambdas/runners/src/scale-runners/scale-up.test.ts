@@ -364,6 +364,7 @@ describe('scaleUp with public GH', () => {
     beforeEach(() => {
       process.env.ENABLE_ORGANIZATION_RUNNERS = 'true';
       expectedRunnerParams = { ...EXPECTED_RUNNER_PARAMS };
+      // eslint-disable-next-line max-len
       expectedRunnerParams.runnerServiceConfig = `--url https://github.com/${TEST_DATA.repositoryOwner} --token 1234abcd `;
     });
 

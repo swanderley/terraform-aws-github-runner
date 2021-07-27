@@ -215,7 +215,7 @@ describe('handler', () => {
 
     it('handles check_run events from whitelisted repositories', async () => {
       const event = JSON.stringify(checkrun_event);
-      process.env.REPOSITORY_WHITE_LIST = '["philips-labs/terraform-aws-github-runner"]';
+      process.env.REPOSITORY_WHITE_LIST = '["Codertocat/Hello-World"]';
       const resp = await handle(
         { 'X-Hub-Signature': await webhooks.sign(event), 'X-GitHub-Event': 'check_run' },
         event,

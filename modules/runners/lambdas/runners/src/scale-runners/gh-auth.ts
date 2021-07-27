@@ -1,12 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { request } from '@octokit/request';
 import { createAppAuth } from '@octokit/auth-app';
-import {
-  Authentication,
-  StrategyOptions,
-  AppAuthentication,
-  InstallationAccessTokenAuthentication,
-} from '@octokit/auth-app/dist-types/types';
+import { StrategyOptions, AppAuthentication } from '@octokit/auth-app/dist-types/types';
 import { OctokitOptions } from '@octokit/core/dist-types/types';
 import { decrypt } from './kms';
 

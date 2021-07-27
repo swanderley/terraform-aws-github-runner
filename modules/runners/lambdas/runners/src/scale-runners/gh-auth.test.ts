@@ -1,7 +1,6 @@
 import { createOctoClient, createGithubAuth } from './gh-auth';
 import nock from 'nock';
 import { createAppAuth } from '@octokit/auth-app';
-import { StrategyOptions } from '@octokit/auth-app/dist-types/types';
 import { decrypt } from './kms';
 import { RequestInterface } from '@octokit/types';
 import { mock, MockProxy } from 'jest-mock-extended';
@@ -46,8 +45,8 @@ describe('Test createGithubAuth', () => {
 });
 
 describe('Test createGithubAuth', () => {
-  const mockedDecrypt = (decrypt as unknown) as jest.Mock;
-  const mockedCreatAppAuth = (createAppAuth as unknown) as jest.Mock;
+  const mockedDecrypt = decrypt as unknown as jest.Mock;
+  const mockedCreatAppAuth = createAppAuth as unknown as jest.Mock;
   const mockedDefaults = jest.spyOn(request, 'defaults');
   let mockedRequestInterface: MockProxy<RequestInterface>;
 
@@ -79,7 +78,7 @@ describe('Test createGithubAuth', () => {
     mockedDecrypt.mockResolvedValueOnce(decryptedValue).mockResolvedValueOnce(b64);
     const mockedAuth = jest.fn();
     mockedAuth.mockResolvedValue({ token });
-    mockedCreatAppAuth.mockImplementation((authOptions: StrategyOptions) => {
+    mockedCreatAppAuth.mockImplementation(() => {
       return mockedAuth;
     });
 
@@ -124,7 +123,7 @@ describe('Test createGithubAuth', () => {
     mockedDecrypt.mockResolvedValueOnce(decryptedValue).mockResolvedValueOnce(b64);
     const mockedAuth = jest.fn();
     mockedAuth.mockResolvedValue({ token });
-    mockedCreatAppAuth.mockImplementation((authOptions: StrategyOptions) => {
+    mockedCreatAppAuth.mockImplementation(() => {
       return mockedAuth;
     });
 
