@@ -136,6 +136,23 @@ describe('handler', () => {
       expect(sendActionRequest).toBeCalled();
     });
 
+    it('Check runner a runner with multiple labels accept a job with a subset of labels.', async () => {
+      process.env.RUNNER_LABELS = '["test", "linux"]';
+      const event = JSON.stringify({
+        ...workflowjob_event,
+        workflow_job: {
+          ...workflowjob_event.workflow_job,
+          labels: ['self-hosted'],
+        },
+      });
+      const resp = await handle(
+        { 'X-Hub-Signature': await webhooks.sign(event), 'X-GitHub-Event': 'workflow_job' },
+        event,
+      );
+      expect(resp).toBe(200);
+      expect(sendActionRequest).toBeCalled();
+    });
+
     it('Check runner labels in mixed order', async () => {
       process.env.RUNNER_LABELS = '["test", "linux"]';
       const event = JSON.stringify({

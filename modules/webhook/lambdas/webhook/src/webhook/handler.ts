@@ -135,14 +135,15 @@ function isRunnerNotAllowed(job: WorkflowJob): boolean {
 
   // ensure the self-hosted label is in the list.
   runnerLabels.add('self-hosted');
-  const sortedRunnerLabels = Array.from(runnerLabels.values()).sort();
-  const sortedWorkflowLabels = job.workflow_job.labels.slice().sort();
+  const runnerMatch = job.workflow_job.labels.every((l) => runnerLabels.has(l));
 
-  const notMatched = sortedWorkflowLabels.toString() !== sortedRunnerLabels.toString();
+  //const sortedWorkflowLabels = job.workflow_job.labels.slice().sort();
+
+  //const notMatched = sortedWorkflowLabels.toString() !== sortedRunnerLabels.toString();
   console.debug(
-    `Received runner job labels: '${sortedWorkflowLabels}' do ${
-      notMatched ? 'NOT' : ''
-    } match the configured labels '${sortedRunnerLabels}'`,
+    `Received runner job labels: '${JSON.stringify(job.workflow_job.labels)}' do ${
+      runnerMatch ? '' : 'NOT'
+    } match the configured labels '${JSON.stringify(runnerLabels)}'`,
   );
-  return notMatched;
+  return !runnerMatch;
 }
