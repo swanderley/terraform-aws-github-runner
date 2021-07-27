@@ -45,6 +45,7 @@ resource "aws_lambda_function" "webhook" {
       GITHUB_APP_WEBHOOK_SECRET = local.github_app_webhook_secret
       SQS_URL_WEBHOOK           = var.sqs_build_queue.id
       REPOSITORY_WHITE_LIST     = jsonencode(var.repository_white_list)
+      RUNNER_LABELS             = jsoneencode(var.runner_extra_labels)
     }
   }
 

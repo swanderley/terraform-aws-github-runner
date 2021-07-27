@@ -36,11 +36,11 @@ A logical question would be why not Kubernetes? In the current approach we stay 
 
 ## Overview
 
-The moment a GitHub action workflow requiring a `self-hosted` runner is triggered, GitHub will try to find a runner which can execute the workload. This module reacts to GitHub's [`check_run` event](https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#check_run) for the triggered workflow and creates a new runner if necessary.
+The moment a GitHub action workflow requiring a `self-hosted` runner is triggered, GitHub will try to find a runner which can execute the workload. This module reacts to GitHub's [`workflow_job` event](https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#workflow_job) for the triggered workflow and creates a new runner if necessary.
 
-For receiving the `check_run` event, a GitHub App needs to be created with a webhook to which the event will be published. Installing the GitHub App in a specific repository or all repositories ensures the `check_run` event will be sent to the webhook.
+For receiving the `workflow_job` event, a Webhook needs to be created. The webhook hook can be defined on enterprise, org, repo, or app level. When using the GitHub app ensure the app is installed in the specific repository or all repositories.
 
-In AWS a [API gateway](https://docs.aws.amazon.com/apigateway/index.html) endpoint is created that is able to receive the GitHub webhook events via HTTP post. The gateway triggers the webhook lambda which will verify the signature of the event. This check guarantees the event is sent by the GitHub App. The lambda only handles `check_run` events with status `created`. The accepted events are posted on a SQS queue. Messages on this queue will be delayed for a configurable amount of seconds (default 30 seconds) to give the available runners time to pick up this build.
+In AWS a [API gateway](https://docs.aws.amazon.com/apigateway/index.html) endpoint is created that is able to receive the GitHub webhook events via HTTP post. The gateway triggers the webhook lambda which will verify the signature of the event. This check guarantees the event is sent by the GitHub App. The lambda only handles `workflow_job` events with status `queued` and matching the runner labels. The accepted events are posted on a SQS queue. Messages on this queue will be delayed for a configurable amount of seconds (default 30 seconds) to give the available runners time to pick up this build.
 
 The "scale up runner" lambda is listening to the SQS queue and picks up events. The lambda runs various checks to decide whether a new EC2 spot instance needs to be created. For example, the instance is not created if the build is already started by an existing runner, or the maximum number of runners is reached.
 
@@ -56,7 +56,7 @@ Secrets and private keys which are passed to the lambdas as environment variable
 
 Permission are managed on several places. Below the most important ones. For details check the Terraform sources.
 
-- The GitHub App requires access to actions and publish `check_run` events to AWS.
+- The GitHub App requires access to actions and publish `workflow_job` events to the AWS webhook (API gateway).
 - The scale up lambda should have access to EC2 for creating and tagging instances.
 - The scale down lambda should have access to EC2 to terminate instances.
 
